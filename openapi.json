@@ -1,0 +1,892 @@
+openapi: 3.0.3
+info:
+  title: ChartDB Backend API
+  version: 1.0.0
+paths:
+  /api/schema/:
+    get:
+      operationId: schema_retrieve
+      description: |-
+        OpenApi3 schema for this API. Format can be selected via content negotiation.
+
+        - YAML: application/vnd.oai.openapi
+        - JSON: application/vnd.oai.openapi+json
+      parameters:
+      - in: query
+        name: format
+        schema:
+          type: string
+          enum:
+          - json
+          - yaml
+      - in: query
+        name: lang
+        schema:
+          type: string
+          enum:
+          - af
+          - ar
+          - ar-dz
+          - ast
+          - az
+          - be
+          - bg
+          - bn
+          - br
+          - bs
+          - ca
+          - ckb
+          - cs
+          - cy
+          - da
+          - de
+          - dsb
+          - el
+          - en
+          - en-au
+          - en-gb
+          - eo
+          - es
+          - es-ar
+          - es-co
+          - es-mx
+          - es-ni
+          - es-ve
+          - et
+          - eu
+          - fa
+          - fi
+          - fr
+          - fy
+          - ga
+          - gd
+          - gl
+          - he
+          - hi
+          - hr
+          - hsb
+          - hu
+          - hy
+          - ia
+          - id
+          - ig
+          - io
+          - is
+          - it
+          - ja
+          - ka
+          - kab
+          - kk
+          - km
+          - kn
+          - ko
+          - ky
+          - lb
+          - lt
+          - lv
+          - mk
+          - ml
+          - mn
+          - mr
+          - ms
+          - my
+          - nb
+          - ne
+          - nl
+          - nn
+          - os
+          - pa
+          - pl
+          - pt
+          - pt-br
+          - ro
+          - ru
+          - sk
+          - sl
+          - sq
+          - sr
+          - sr-latn
+          - sv
+          - sw
+          - ta
+          - te
+          - tg
+          - th
+          - tk
+          - tr
+          - tt
+          - udm
+          - ug
+          - uk
+          - ur
+          - uz
+          - vi
+          - zh-hans
+          - zh-hant
+      tags:
+      - schema
+      security:
+      - {}
+      responses:
+        '200':
+          content:
+            application/vnd.oai.openapi:
+              schema:
+                type: object
+                additionalProperties: {}
+            application/yaml:
+              schema:
+                type: object
+                additionalProperties: {}
+            application/vnd.oai.openapi+json:
+              schema:
+                type: object
+                additionalProperties: {}
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+          description: ''
+  /api/v1/ai/sql-export/stream:
+    post:
+      operationId: v1_ai_sql_export_stream_create
+      tags:
+      - v1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SQLExportRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/SQLExportRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/SQLExportRequest'
+        required: true
+      security:
+      - {}
+      responses:
+        '200':
+          content:
+            text/event-stream:
+              schema:
+                type: string
+          description: ''
+  /api/v1/diagrams:
+    get:
+      operationId: v1_diagrams_list
+      tags:
+      - v1
+      security:
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/DiagramSummary'
+          description: ''
+    post:
+      operationId: v1_diagrams_create
+      tags:
+      - v1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DiagramAggregate'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/DiagramAggregate'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/DiagramAggregate'
+        required: true
+      security:
+      - {}
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DiagramAggregate'
+          description: ''
+  /api/v1/diagrams/{diagram_id}:
+    get:
+      operationId: v1_diagrams_retrieve
+      parameters:
+      - in: path
+        name: diagram_id
+        schema:
+          type: string
+        required: true
+      tags:
+      - v1
+      security:
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DiagramAggregate'
+          description: ''
+    put:
+      operationId: v1_diagrams_update
+      parameters:
+      - in: path
+        name: diagram_id
+        schema:
+          type: string
+        required: true
+      tags:
+      - v1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DiagramAggregate'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/DiagramAggregate'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/DiagramAggregate'
+        required: true
+      security:
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DiagramAggregate'
+          description: ''
+    delete:
+      operationId: v1_diagrams_destroy
+      parameters:
+      - in: path
+        name: diagram_id
+        schema:
+          type: string
+        required: true
+      tags:
+      - v1
+      security:
+      - {}
+      responses:
+        '204':
+          description: No response body
+  /api/v1/health/live:
+    get:
+      operationId: v1_health_live_retrieve
+      tags:
+      - v1
+      security:
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Health'
+          description: ''
+  /api/v1/health/ready:
+    get:
+      operationId: v1_health_ready_retrieve
+      tags:
+      - v1
+      security:
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Readiness'
+          description: ''
+  /api/v1/source-database/introspect:
+    post:
+      operationId: v1_source_database_introspect_create
+      tags:
+      - v1
+      security:
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+          description: ''
+components:
+  schemas:
+    Area:
+      type: object
+      properties:
+        id:
+          type: string
+          maxLength: 64
+        name:
+          type: string
+          maxLength: 255
+        x:
+          type: number
+          format: double
+        y:
+          type: number
+          format: double
+        width:
+          type: number
+          format: double
+        height:
+          type: number
+          format: double
+        color:
+          type: string
+          maxLength: 64
+        order:
+          type: integer
+          nullable: true
+      required:
+      - color
+      - height
+      - id
+      - name
+      - width
+      - x
+      - y
+    CardinalityEnum:
+      enum:
+      - one
+      - many
+      type: string
+      description: |-
+        * `one` - one
+        * `many` - many
+    CheckConstraint:
+      type: object
+      properties:
+        id:
+          type: string
+          maxLength: 64
+        expression:
+          type: string
+        createdAt:
+          type: integer
+      required:
+      - createdAt
+      - expression
+      - id
+    CustomType:
+      type: object
+      properties:
+        id:
+          type: string
+          maxLength: 64
+        schema:
+          type: string
+          nullable: true
+        name:
+          type: string
+          maxLength: 255
+        kind:
+          $ref: '#/components/schemas/KindEnum'
+        values:
+          type: array
+          items:
+            type: string
+          nullable: true
+        fields:
+          type: array
+          items:
+            $ref: '#/components/schemas/CustomTypeField'
+          nullable: true
+        order:
+          type: integer
+          nullable: true
+      required:
+      - id
+      - kind
+      - name
+    CustomTypeField:
+      type: object
+      properties:
+        field:
+          type: string
+          maxLength: 255
+        type:
+          type: string
+          maxLength: 255
+      required:
+      - field
+      - type
+    DataType:
+      type: object
+      properties:
+        id:
+          type: string
+          maxLength: 255
+        name:
+          type: string
+          maxLength: 255
+      required:
+      - id
+      - name
+    DatabaseEditionEnum:
+      enum:
+      - supabase
+      - timescale
+      - mysql_5_7
+      - sql_server_2016_and_below
+      - cloudflare_d1
+      type: string
+      description: |-
+        * `supabase` - supabase
+        * `timescale` - timescale
+        * `mysql_5_7` - mysql_5_7
+        * `sql_server_2016_and_below` - sql_server_2016_and_below
+        * `cloudflare_d1` - cloudflare_d1
+    DatabaseTypeEnum:
+      enum:
+      - generic
+      - postgresql
+      - mysql
+      - sql_server
+      - mariadb
+      - sqlite
+      - clickhouse
+      - cockroachdb
+      - oracle
+      type: string
+      description: |-
+        * `generic` - generic
+        * `postgresql` - postgresql
+        * `mysql` - mysql
+        * `sql_server` - sql_server
+        * `mariadb` - mariadb
+        * `sqlite` - sqlite
+        * `clickhouse` - clickhouse
+        * `cockroachdb` - cockroachdb
+        * `oracle` - oracle
+    Dependency:
+      type: object
+      properties:
+        id:
+          type: string
+          maxLength: 64
+        schema:
+          type: string
+          nullable: true
+        tableId:
+          type: string
+          maxLength: 64
+        dependentSchema:
+          type: string
+          nullable: true
+        dependentTableId:
+          type: string
+          maxLength: 64
+        createdAt:
+          type: integer
+      required:
+      - createdAt
+      - dependentTableId
+      - id
+      - tableId
+    DiagramAggregate:
+      type: object
+      properties:
+        id:
+          type: string
+          maxLength: 64
+        name:
+          type: string
+          maxLength: 255
+        databaseType:
+          $ref: '#/components/schemas/DatabaseTypeEnum'
+        databaseEdition:
+          nullable: true
+          oneOf:
+          - $ref: '#/components/schemas/DatabaseEditionEnum'
+          - $ref: '#/components/schemas/NullEnum'
+        tables:
+          type: array
+          items:
+            $ref: '#/components/schemas/Table'
+        relationships:
+          type: array
+          items:
+            $ref: '#/components/schemas/Relationship'
+        dependencies:
+          type: array
+          items:
+            $ref: '#/components/schemas/Dependency'
+        areas:
+          type: array
+          items:
+            $ref: '#/components/schemas/Area'
+        customTypes:
+          type: array
+          items:
+            $ref: '#/components/schemas/CustomType'
+        notes:
+          type: array
+          items:
+            $ref: '#/components/schemas/Note'
+        filter:
+          $ref: '#/components/schemas/DiagramFilter'
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+        revision:
+          type: integer
+          minimum: 1
+      required:
+      - databaseType
+      - id
+      - name
+    DiagramFilter:
+      type: object
+      properties:
+        schemaIds:
+          type: array
+          items:
+            type: string
+        tableIds:
+          type: array
+          items:
+            type: string
+    DiagramSummary:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        databaseType:
+          type: string
+        databaseEdition:
+          type: string
+          nullable: true
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+        revision:
+          type: integer
+      required:
+      - createdAt
+      - databaseEdition
+      - databaseType
+      - id
+      - name
+      - revision
+      - updatedAt
+    Field:
+      type: object
+      properties:
+        id:
+          type: string
+          maxLength: 64
+        name:
+          type: string
+          maxLength: 255
+        type:
+          $ref: '#/components/schemas/DataType'
+        primaryKey:
+          type: boolean
+        unique:
+          type: boolean
+        nullable:
+          type: boolean
+        increment:
+          type: boolean
+          nullable: true
+        isArray:
+          type: boolean
+          nullable: true
+        createdAt:
+          type: integer
+        characterMaximumLength:
+          type: string
+          nullable: true
+        precision:
+          type: integer
+          nullable: true
+        scale:
+          type: integer
+          nullable: true
+        default:
+          type: string
+          nullable: true
+        collation:
+          type: string
+          nullable: true
+        comments:
+          type: string
+          nullable: true
+        check:
+          type: string
+          nullable: true
+      required:
+      - createdAt
+      - id
+      - name
+      - nullable
+      - primaryKey
+      - type
+      - unique
+    Health:
+      type: object
+      properties:
+        status:
+          type: string
+      required:
+      - status
+    Index:
+      type: object
+      properties:
+        id:
+          type: string
+          maxLength: 64
+        name:
+          type: string
+          maxLength: 255
+        unique:
+          type: boolean
+        fieldIds:
+          type: array
+          items:
+            type: string
+            maxLength: 64
+        createdAt:
+          type: integer
+        type:
+          nullable: true
+          oneOf:
+          - $ref: '#/components/schemas/TypeEnum'
+          - $ref: '#/components/schemas/NullEnum'
+        isPrimaryKey:
+          type: boolean
+          nullable: true
+        comments:
+          type: string
+          nullable: true
+      required:
+      - createdAt
+      - fieldIds
+      - id
+      - name
+      - unique
+    KindEnum:
+      enum:
+      - enum
+      - composite
+      type: string
+      description: |-
+        * `enum` - enum
+        * `composite` - composite
+    Note:
+      type: object
+      properties:
+        id:
+          type: string
+          maxLength: 64
+        x:
+          type: number
+          format: double
+        y:
+          type: number
+          format: double
+        width:
+          type: number
+          format: double
+        height:
+          type: number
+          format: double
+        color:
+          type: string
+          maxLength: 64
+        order:
+          type: integer
+          nullable: true
+        content:
+          type: string
+      required:
+      - color
+      - content
+      - height
+      - id
+      - width
+      - x
+      - y
+    NullEnum:
+      enum:
+      - null
+    Readiness:
+      type: object
+      properties:
+        status:
+          type: string
+      required:
+      - status
+    Relationship:
+      type: object
+      properties:
+        id:
+          type: string
+          maxLength: 64
+        name:
+          type: string
+          maxLength: 255
+        sourceSchema:
+          type: string
+          nullable: true
+        sourceTableId:
+          type: string
+          maxLength: 64
+        targetSchema:
+          type: string
+          nullable: true
+        targetTableId:
+          type: string
+          maxLength: 64
+        sourceFieldId:
+          type: string
+          maxLength: 64
+        targetFieldId:
+          type: string
+          maxLength: 64
+        sourceCardinality:
+          $ref: '#/components/schemas/CardinalityEnum'
+        targetCardinality:
+          $ref: '#/components/schemas/CardinalityEnum'
+        createdAt:
+          type: integer
+      required:
+      - createdAt
+      - id
+      - name
+      - sourceCardinality
+      - sourceFieldId
+      - sourceTableId
+      - targetCardinality
+      - targetFieldId
+      - targetTableId
+    SQLExportRequest:
+      type: object
+      properties:
+        sqlScript:
+          type: string
+          maxLength: 2000000
+        targetDatabaseType:
+          $ref: '#/components/schemas/DatabaseTypeEnum'
+      required:
+      - sqlScript
+      - targetDatabaseType
+    Table:
+      type: object
+      properties:
+        id:
+          type: string
+          maxLength: 64
+        name:
+          type: string
+          maxLength: 255
+        schema:
+          type: string
+          nullable: true
+        x:
+          type: number
+          format: double
+        y:
+          type: number
+          format: double
+        fields:
+          type: array
+          items:
+            $ref: '#/components/schemas/Field'
+        indexes:
+          type: array
+          items:
+            $ref: '#/components/schemas/Index'
+        checkConstraints:
+          type: array
+          items:
+            $ref: '#/components/schemas/CheckConstraint'
+          nullable: true
+        color:
+          type: string
+          maxLength: 64
+        isView:
+          type: boolean
+        isMaterializedView:
+          type: boolean
+          nullable: true
+        createdAt:
+          type: integer
+        width:
+          type: number
+          format: double
+          nullable: true
+        comments:
+          type: string
+          nullable: true
+        order:
+          type: integer
+          nullable: true
+        expanded:
+          type: boolean
+          nullable: true
+        parentAreaId:
+          type: string
+          nullable: true
+          maxLength: 64
+      required:
+      - color
+      - createdAt
+      - fields
+      - id
+      - indexes
+      - isView
+      - name
+      - x
+      - y
+    TypeEnum:
+      enum:
+      - btree
+      - hash
+      - gist
+      - gin
+      - spgist
+      - brin
+      - nonclustered
+      - clustered
+      - xml
+      - fulltext
+      - spatial
+      - index
+      type: string
+      description: |-
+        * `btree` - btree
+        * `hash` - hash
+        * `gist` - gist
+        * `gin` - gin
+        * `spgist` - spgist
+        * `brin` - brin
+        * `nonclustered` - nonclustered
+        * `clustered` - clustered
+        * `xml` - xml
+        * `fulltext` - fulltext
+        * `spatial` - spatial
+        * `index` - index
