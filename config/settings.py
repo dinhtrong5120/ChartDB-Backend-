@@ -45,12 +45,7 @@ def mysql_database(prefix: str, default_name: str):
     }
 
 
-if os.getenv("USE_SQLITE", "false").lower() == "true":
-    DATABASES = {
-        "default": {"ENGINE": "django.db.backends.sqlite3", "NAME": BASE_DIR / "db.sqlite3"}
-    }
-else:
-    DATABASES = {"default": mysql_database("APP", "chartdb")}
+DATABASES = {"default": mysql_database("APP", "chartdb")}
 
 CORS_ALLOWED_ORIGINS = [
     item.strip()

@@ -27,15 +27,14 @@ python manage.py runserver
 ```
 
 Run this from the `chartdb-backend` directory with Python 3.13 or later. The local
-server stores diagrams in `db.sqlite3`, applies migrations automatically, and
-serves the API at `http://127.0.0.1:8000/api/v1`. The frontend origins
+server stores diagrams in MySQL database `chartdb`, applies migrations automatically,
+and serves the API at `http://127.0.0.1:8000/api/v1`. The frontend origins
 `http://localhost:5173` and `http://127.0.0.1:5173` are allowed by default.
 
-To introspect an imported MySQL database, copy `.env.local.example` to `.env.local`
-and set `SOURCE_DB_*` to that database's host, port, name, username, and password.
-`manage.py runserver` loads this local file. The MySQL user only needs `SELECT`
-permissions. AI export needs `OPENAI_*` settings. Docker uses `APP_DB_*` for its
-separate application database and continues to load `.env` through Compose.
+The Windows defaults use MySQL at `127.0.0.1:3306`, database `chartdb`, user `root`,
+and password `sql123456` for both application storage and schema introspection.
+Copy `.env.local.example` to `.env.local` only when these values need to change.
+If MySQL is unavailable, migrations fail and the backend does not start.
 
 ## API
 
@@ -56,12 +55,12 @@ python3.13 -m venv .venv
 .venv/bin/pytest
 ```
 
-The test settings use an in-memory SQLite database. Docker and normal runtime use MySQL.
+The test settings use MySQL database `chartdb_test`.
 
 Generate and validate the OpenAPI document with:
 
 ```bash
-USE_SQLITE=true .venv/bin/python manage.py spectacular --validate --file openapi.json
+.venv/bin/python manage.py spectacular --validate --file openapi.json
 ```
 
 ## Source database safety
