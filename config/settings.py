@@ -53,7 +53,12 @@ else:
     DATABASES = {"default": mysql_database("APP", "chartdb")}
 
 CORS_ALLOWED_ORIGINS = [
-    item for item in os.getenv("CORS_ALLOWED_ORIGINS", "http://localhost:5173").split(",") if item
+    item.strip()
+    for item in os.getenv(
+        "CORS_ALLOWED_ORIGINS",
+        "http://localhost:5173,http://127.0.0.1:5173",
+    ).split(",")
+    if item.strip()
 ]
 DATA_UPLOAD_MAX_MEMORY_SIZE = int(os.getenv("MAX_REQUEST_BYTES", str(10 * 1024 * 1024)))
 

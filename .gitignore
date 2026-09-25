@@ -6,5 +6,6 @@ __pycache__/
 .idea/
 .DS_Store
 .env
+.env.local
 *.py[cod]
 db.sqlite3

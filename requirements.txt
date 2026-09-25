@@ -1,0 +1,8 @@
+Django>=5.2,<5.3
+djangorestframework>=3.16,<4
+django-cors-headers>=4.7,<5
+drf-spectacular>=0.28,<1
+mysqlclient>=2.2,<3
+openai>=1.100,<3
+python-dotenv>=1.0,<2
+uvicorn>=0.34,<1

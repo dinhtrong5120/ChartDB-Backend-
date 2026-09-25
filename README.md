@@ -19,20 +19,23 @@ docker compose up --build
 
 Set `VITE_API_BASE_URL=http://localhost:8000/api/v1` in the frontend.
 
-## Local development
+## Local development on Windows, macOS, or Linux
 
 ```bash
+python -m pip install -r requirements.txt
 python manage.py runserver
 ```
 
-Run this from the `chartdb-backend` directory. Python 3.13 must be installed; the
-command creates `.venv` and installs dependencies on first use. The local server
-stores diagrams in `db.sqlite3` and applies migrations automatically. It serves
-the API at `http://127.0.0.1:8000/api/v1`.
+Run this from the `chartdb-backend` directory with Python 3.13 or later. The local
+server stores diagrams in `db.sqlite3`, applies migrations automatically, and
+serves the API at `http://127.0.0.1:8000/api/v1`. The frontend origins
+`http://localhost:5173` and `http://127.0.0.1:5173` are allowed by default.
 
-The optional source introspection and AI export endpoints need `SOURCE_DB_*` and
-`OPENAI_*` environment variables, respectively. Docker uses MySQL for the
-application database via `APP_DB_*` and keeps its existing startup path.
+To introspect an imported MySQL database, copy `.env.local.example` to `.env.local`
+and set `SOURCE_DB_*` to that database's host, port, name, username, and password.
+`manage.py runserver` loads this local file. The MySQL user only needs `SELECT`
+permissions. AI export needs `OPENAI_*` settings. Docker uses `APP_DB_*` for its
+separate application database and continues to load `.env` through Compose.
 
 ## API
 
